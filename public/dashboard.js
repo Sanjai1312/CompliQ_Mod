@@ -2519,9 +2519,10 @@ function paintOverviewDetail(turbine) {
   sideInput.value = `${SIDE_NAME[row.surface] || row.surface} · ${bladeDisplayName(row.blade)}`;
   if (STATE.overviewCompareMetres == null) radiusInput.value = `${metres.toFixed(1)} m`;
   if (severity) severity.value = String(saved.severity || row.cat || 2);
-  const photos = g97StationCandidates(row.blade, row.surface, row.index);
-  photo.alt = `${row.blade} ${row.surface}`;
-  useFirstExistingImage(photo, photos, () => photo.removeAttribute('src'));
+  // The fleet overview uses the turbine's supplied full-view photo as its
+  // stable canvas. Station-level annotated captures belong in the blade view.
+  photo.alt = `${turbine?.assetId || 'WTG-001'} full turbine overview`;
+  photo.src = 'images/1.jpg';
   applyOverviewSeverityTheme(Number(severity?.value) || saved.severity || row.cat || 2);
   paintOverviewBox(saved.box || null);
   paintBladeComparison(turbine, row);
