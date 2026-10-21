@@ -2345,7 +2345,7 @@ function renderFullTurbineOverview(container, turbine) {
     });
   });
   bindOverviewEditors(turbine);
-  paintOverviewDetail(turbine, { initial: true });
+  paintOverviewDetail(turbine);
   parkCompareView();
   mountTurbine3D(document.getElementById('turbine-3d'), turbine, open);
 }
@@ -2474,7 +2474,7 @@ function bindOverviewEditors(turbine) {
   applyOverviewSeverityTheme(Number(severitySel?.value) || 2);
 }
 
-function paintOverviewDetail(turbine, { initial = false } = {}) {
+function paintOverviewDetail(turbine) {
   const row = ensureOverviewAnomaly();
   const idInput = document.getElementById('overview-anomaly-id');
   const typeInput = document.getElementById('overview-anomaly-type');
@@ -2491,12 +2491,7 @@ function paintOverviewDetail(turbine, { initial = false } = {}) {
     fillDefectClassSelect(typeInput, '');
     sideInput.value = '';
     radiusInput.value = '';
-    if (initial) {
-      photo.alt = `${turbine?.assetId || 'WTG-001'} full turbine overview`;
-      photo.src = 'images/1.jpg';
-    } else {
-      photo.removeAttribute('src');
-    }
+    photo.removeAttribute('src');
     paintOverviewBox(null);
     paintBladeComparison(turbine, null);
     return;
@@ -2509,16 +2504,11 @@ function paintOverviewDetail(turbine, { initial = false } = {}) {
   sideInput.value = `${SIDE_NAME[row.surface] || row.surface} · ${bladeDisplayName(row.blade)}`;
   if (STATE.overviewCompareMetres == null) radiusInput.value = `${metres.toFixed(1)} m`;
   if (severity) severity.value = String(saved.severity || row.cat || 2);
-  if (initial) {
-    photo.alt = `${turbine?.assetId || 'WTG-001'} full turbine overview`;
-    photo.src = 'images/1.jpg';
-  } else {
-    const photos = g97StationCandidates(row.blade, row.surface, row.index);
-    photo.alt = `${row.blade} ${row.surface}`;
-    useFirstExistingImage(photo, photos, () => photo.removeAttribute('src'));
-  }
+  const photos = g97StationCandidates(row.blade, row.surface, row.index);
+  photo.alt = `${row.blade} ${row.surface}`;
+  useFirstExistingImage(photo, photos, () => photo.removeAttribute('src'));
   applyOverviewSeverityTheme(Number(severity?.value) || saved.severity || row.cat || 2);
-  paintOverviewBox(initial ? null : (saved.box || null));
+  paintOverviewBox(saved.box || null);
   paintBladeComparison(turbine, row);
 }
 
