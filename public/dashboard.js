@@ -408,7 +408,6 @@ function animateNumber(id, target) {
 // ══════════════════════════════════════════════════
 // 5. FLEET GRID
 // ══════════════════════════════════════════════════
-let fleetStatusFilter = 'all';
 const AVAILABLE_DETAILED_ASSET = 'WTG-001';
 const FLEET_CAT_OPTIONS = [
   { value: 1, label: 'C1 · Cosmetic' },
@@ -455,7 +454,6 @@ function turbineSeveritySet(turbine) {
 function filteredFleetTurbines() {
   const query = fleetFilters.query.trim().toLowerCase();
   return (STATE.db?.turbines || []).filter(turbine => {
-    if (fleetStatusFilter !== 'all' && turbine.status !== fleetStatusFilter) return false;
     if (query && !turbineSearchBlob(turbine).includes(query)) return false;
     if (fleetFilters.capacity.length && !fleetFilters.capacity.includes(turbineCapacityBand(turbine.power))) return false;
     const region = turbine.state || turbine.region || '';
@@ -479,7 +477,7 @@ function syncFleetFilterButtons() {
     button.classList.toggle('is-on', count > 0);
   });
   const clear = document.getElementById('fleet-clear-filters');
-  if (clear) clear.disabled = fleetStatusFilter === 'all' && !fleetFilters.query.trim() && !fleetFilters.capacity.length && !fleetFilters.region.length && !fleetFilters.severity.length;
+  if (clear) clear.disabled = !fleetFilters.query.trim() && !fleetFilters.capacity.length && !fleetFilters.region.length && !fleetFilters.severity.length;
 }
 
 function closeFleetDropdowns(except = null) {
@@ -554,8 +552,6 @@ function initFleetToolbar() {
       fleetFilters.capacity = [];
       fleetFilters.region = [];
       fleetFilters.severity = [];
-      fleetStatusFilter = 'all';
-      document.querySelectorAll('.fleet-filter').forEach(button => button.classList.remove('active'));
       if (search) search.value = '';
       populateFleetFilterMenus();
       closeFleetDropdowns();
@@ -850,17 +846,6 @@ function renderAssetList(filter = 'all') {
     list.appendChild(row);
   });
 }
-
-document.getElementById('fleet-status-filters')?.addEventListener('click', event => {
-  const btn = event.target.closest('.fleet-filter');
-  if (!btn) return;
-  fleetStatusFilter = fleetStatusFilter === btn.dataset.status ? 'all' : btn.dataset.status;
-  document.querySelectorAll('.fleet-filter').forEach(item => {
-    item.classList.toggle('active', item.dataset.status === fleetStatusFilter);
-  });
-  syncFleetFilterButtons();
-  renderFleetGrid();
-});
 
 // Filter buttons
 document.querySelectorAll('.fbtn').forEach(btn => {

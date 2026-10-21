@@ -1033,38 +1033,11 @@ body {
 .log-payload { color: var(--c-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @keyframes slide-in-log { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
 
-/* LEGEND */
-.legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--c-muted); }
-.fleet-filter {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 4px 10px;
-  color: inherit;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-.fleet-filter:hover,
-.fleet-filter.active {
-  border-color: var(--c-teal);
-  background: rgba(15, 164, 175, 0.12);
-  color: var(--c-teal);
-}
-.fleet-filter .leg-dot { margin-right: 0; }
 .fleet-empty {
   margin: 8px 0;
   color: var(--c-muted);
   font-size: 0.85rem;
 }
-.leg-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 3px; }
-.leg-dot.good { background: #2ECC71; box-shadow: 0 0 5px #2ECC71; }
-.leg-dot.warn { background: #F2C94C; box-shadow: 0 0 5px #F2C94C; }
-.leg-dot.crit { background: #EB5757; box-shadow: 0 0 5px #EB5757; }
-
 /* FILTER BUTTONS */
 .filter-btns { display: flex; gap: 6px; }
 .fbtn {
